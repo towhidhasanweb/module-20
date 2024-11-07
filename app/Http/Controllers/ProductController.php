@@ -10,9 +10,6 @@ use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
             $search = $request->query('search');
@@ -27,26 +24,18 @@ class ProductController extends Controller
                 ->orWhere('description', 'like', "%{$search}%");
         }
 
-        // Get sorted and filtered products
         $query->orderBy($sortBy, $sortOrder);
         $products = $query->paginate(5);
-
-        // Fetch products with sorting
 
         return view('index', compact('products', 'search', 'sortBy', 'sortOrder'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+
     public function create()
     {
        return view('create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -80,27 +69,18 @@ class ProductController extends Controller
     }
 
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Product $product, $id)
     {
         $product = Product::findorfail($id);
         return view('show', compact('product'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Product $product, $id)
     {
         $product = Product::findorfail($id);
         return view('edit', compact('product'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Product $product)
     {
         $id = $request->id;
@@ -126,9 +106,6 @@ class ProductController extends Controller
         return redirect()->route('products');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Product $product, $id)
     {
         $product = Product::findOrFail($id);
