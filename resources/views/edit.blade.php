@@ -28,7 +28,7 @@
                                     <div class="form-group">
                                         <label>Product Name</label>
                                         <input type="text" class="form-control input-default" value="{{$product->name}}" name="name" placeholder="Product Name">
-                                        <input type="hidden" class="form-control input-default" value="{{$product->id}}" name="id" >
+                                        {{-- <input type="hidden" class="form-control input-default" value="{{$product->id}}" name="id" > --}}
                                         @if ($errors->has('name'))
                                             <span class="text-danger">{{ $errors->first('name') }}</span>
                                         @endif

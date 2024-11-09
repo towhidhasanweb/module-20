@@ -15,8 +15,6 @@ class ProductController extends Controller
             $search = $request->query('search');
             $sortBy  = $request->query('sort_by', 'name');
             $sortOrder = $request->query('sort_order', 'asc');
-
-
         $query = Product::query();
 
         if ($search) {
@@ -81,11 +79,30 @@ class ProductController extends Controller
         return view('edit', compact('product'));
     }
 
-    public function update(Request $request, Product $product)
-    {
-        $id = $request->id;
-        
+    public function update(Request $request, Product $product, $id)
+    {   
         $product = Product::findorfail($id);
+        $product_id = $request->product_id == $product->product_id;
+        
+        If(!$product_id){
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'price' => 'required|numeric|min:0',
+                'product_id' => 'required|string|unique:products,product_id|max:255'
+            ],[
+                'name.required'=> 'Product name is required',
+                'product_id.required' => 'The product ID is required.',
+                'product_id.unique' => 'This product ID has already been taken.',
+            ]);
+        }else{
+            $validated = $request->validate([
+                'name' => 'required|string|max:255',
+                'price' => 'required|numeric|min:0',
+                
+            ],[
+                'name.required'=> 'Product name is required',
+            ]);
+        }
         $imagePath = $product->image;
         if($request->has('image')){
             $file = $request->file('image');
